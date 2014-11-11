@@ -108,7 +108,7 @@ getInfo: function(socketId, callback) {
 },
 
 //exports.getSockets = function(callback) {
-getSockets = function(callback) {
+getSockets: function(callback) {
     var win = callback && function(results) {
         for (var result in results) {
             result.persistent = !!result.persistent;
