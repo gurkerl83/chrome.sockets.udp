@@ -3,7 +3,8 @@
 // found in the LICENSE file.
 
 #import <Cordova/CDVPlugin.h>
-#import "GCDAsyncUdpSocket.h"
+//#import "GCDAsyncUdpSocket.h"
+#import "MTGCDAsyncUdpSocket.h"
 #import <arpa/inet.h>
 #import <ifaddrs.h>
 #import <netdb.h>
