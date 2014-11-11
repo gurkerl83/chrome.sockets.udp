@@ -18,7 +18,8 @@
 
   <dependency id="org.chromium.common" />
 
-  <js-module src="sockets.udp.js" name="sockets.udp">
+  <!--<js-module src="sockets.udp.js" name="sockets.udp">-->
+  <js-module src="sockets.udp.js" name="udp">
     <clobbers target="chrome.sockets.udp" />
   </js-module>
 
