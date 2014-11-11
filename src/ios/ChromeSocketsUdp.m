@@ -74,7 +74,7 @@ static NSString* stringFromData(NSData* data) {
     NSNumber* _bufferSize;
     NSNumber* _paused;
     
-    GCDAsyncUdpSocket* _socket;
+    MTGCDAsyncUdpSocket* _socket;
 
     NSMutableArray* _sendCallbacks;
     
@@ -97,7 +97,7 @@ static NSString* stringFromData(NSData* data) {
         _sendCallbacks = [NSMutableArray array];
         _closeCallback = nil;
         
-        _socket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_main_queue()];
+        _socket = [[MTGCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_main_queue()];
        
         [_socket enableBroadcast:YES error:nil];
         _multicastGroups = [NSMutableSet set];
@@ -182,7 +182,7 @@ static NSString* stringFromData(NSData* data) {
     }
 }
 
-- (void)udpSocket:(GCDAsyncUdpSocket*)sock didSendDataWithTag:(long)tag
+- (void)udpSocket:(MTGCDAsyncUdpSocket*)sock didSendDataWithTag:(long)tag
 {
     VERBOSE_LOG(@"udpSocket:didSendDataWithTag socketId: %u", _socketId);
 
@@ -194,7 +194,7 @@ static NSString* stringFromData(NSData* data) {
     callback(YES, nil);
 }
 
-- (void)udpSocket:(GCDAsyncUdpSocket*)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error
+- (void)udpSocket:(MTGCDAsyncUdpSocket*)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error
 {
     VERBOSE_LOG(@"udpSocket:didNotSendDataWithTag socketId: %u", _socketId);
 
@@ -206,14 +206,14 @@ static NSString* stringFromData(NSData* data) {
     callback(NO, error);
 }
 
-- (void)udpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext
+- (void)udpSocket:(MTGCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext
 {
     VERBOSE_LOG(@"udbSocket:didReceiveData socketId: %u", _socketId);
     
-    [_plugin fireReceiveEventsWithSocketId:_socketId data:data address:[GCDAsyncUdpSocket hostFromAddress:address] port:[GCDAsyncUdpSocket portFromAddress:address]];
+    [_plugin fireReceiveEventsWithSocketId:_socketId data:data address:[MTGCDAsyncUdpSocket hostFromAddress:address] port:[MTGCDAsyncUdpSocket portFromAddress:address]];
 }
 
-- (void)udpSocketDidClose:(GCDAsyncUdpSocket *)sock withError:(NSError *)error
+- (void)udpSocketDidClose:(MTGCDAsyncUdpSocket *)sock withError:(NSError *)error
 {
     VERBOSE_LOG(@"udbSocketDidClose:withError socketId: %u", _socketId);
 
