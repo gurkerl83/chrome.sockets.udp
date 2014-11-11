@@ -6,6 +6,7 @@ var platform = cordova.require('cordova/platform');
 var exec = cordova.require('cordova/exec');
 var callbackWithError = require('org.chromium.common.errors').callbackWithError;
 
+/*
 var checkBufferSize = function(bufferSize) {
 
     if (bufferSize === null)
@@ -19,8 +20,12 @@ var checkBufferSize = function(bufferSize) {
         console.warn('Buffer size exceeds IPv6 UDP 4294967295 size limit.');
     }
 };
+*/
 
-exports.create = function(properties, callback) {
+var udp = {
+
+//exports.create = function(properties, callback) {
+create: function(properties, callback) {
     if (typeof properties == 'function') {
         callback = properties;
         properties = {};
@@ -31,20 +36,26 @@ exports.create = function(properties, callback) {
         };
         callback(createInfo);
     };
-    checkBufferSize(properties.bufferSize);
+    //checkBufferSize(properties.bufferSize);
     exec(win, null, 'ChromeSocketsUdp', 'create', [properties]);
-};
+//};
+},
 
-exports.update = function(socketId, properties, callback) {
-    checkBufferSize(properties.bufferSize);
+//exports.update = function(socketId, properties, callback) {
+update: function(socketId, properties, callback) {
+    //checkBufferSize(properties.bufferSize);
     exec(callback, null, 'ChromeSocketsUdp', 'update', [socketId, properties]);
-};
+//};
+},
 
-exports.setPaused = function(socketId, paused, callback) {
+//exports.setPaused = function(socketId, paused, callback) {
+setPaused: function(socketId, paused, callback) {
     exec(callback, null, 'ChromeSocketsUdp', 'setPaused', [socketId, paused]);
-};
+//};
+},
 
-exports.bind = function(socketId, address, port, callback) {
+//exports.bind = function(socketId, address, port, callback) {
+bind: function(socketId, address, port, callback) {
     var win = callback && function() {
         callback(0);
     };
@@ -52,9 +63,11 @@ exports.bind = function(socketId, address, port, callback) {
         callbackWithError(error.message, callback, error.resultCode);
     };
     exec(win, fail, 'ChromeSocketsUdp', 'bind', [socketId, address, port]);
-};
+//};
+},
 
-exports.send = function(socketId, data, address, port, callback) {
+//exports.send = function(socketId, data, address, port, callback) {
+send: function(socketId, data, address, port, callback) {
     var type = Object.prototype.toString.call(data).slice(8, -1);
     if (type != 'ArrayBuffer') {
         throw new Error('chrome.sockets.udp.send - data is not an ArrayBuffer! (Got: ' + type + ')');
@@ -74,22 +87,28 @@ exports.send = function(socketId, data, address, port, callback) {
         callbackWithError(error.message, callback, sendInfo);
     };
     exec(win, fail, 'ChromeSocketsUdp', 'send', [socketId, address, port, data]);
-};
+//};
+},
 
-exports.close = function(socketId, callback) {
+//exports.close = function(socketId, callback) {
+close: function(socketId, callback) {
     exec(callback, null, 'ChromeSocketsUdp', 'close', [socketId]);
-};
+//};
+},
 
-exports.getInfo = function(socketId, callback) {
+//exports.getInfo = function(socketId, callback) {
+getInfo: function(socketId, callback) {
     var win = callback && function(result) {
         result.persistent = !!result.persistent;
         result.paused = !!result.paused;
         callback(result);
     };
     exec(win, null, 'ChromeSocketsUdp', 'getInfo', [socketId]);
-};
+//};
+},
 
-exports.getSockets = function(callback) {
+//exports.getSockets = function(callback) {
+getSockets = function(callback) {
     var win = callback && function(results) {
         for (var result in results) {
             result.persistent = !!result.persistent;
@@ -98,9 +117,11 @@ exports.getSockets = function(callback) {
         callback(results);
     };
     exec(win, null, 'ChromeSocketsUdp', 'getSockets', []);
-};
+//};
+},
 
-exports.joinGroup = function(socketId, address, callback) {
+//exports.joinGroup = function(socketId, address, callback) {
+joinGroup: function(socketId, address, callback) {
     var win = callback && function() {
         callback(0);
     };
@@ -108,9 +129,11 @@ exports.joinGroup = function(socketId, address, callback) {
         callback(error.message, callback, error.resultCode);
     }
     exec(win, fail, 'ChromeSocketsUdp', 'joinGroup', [socketId, address]);
-};
+//};
+},
 
-exports.leaveGroup = function(socketId, address, callback) {
+//exports.leaveGroup = function(socketId, address, callback) {
+leaveGroup: function(socketId, address, callback) {
     var win = callback && function() {
         callback(0);
     };
@@ -118,9 +141,11 @@ exports.leaveGroup = function(socketId, address, callback) {
         callback(error.message, callback, error.resultCode);
     }
     exec(win, fail, 'ChromeSocketsUdp', 'leaveGroup', [socketId, address]);
-};
+//};
+},
 
-exports.setMulticastTimeToLive = function(socketId, ttl, callback) {
+//exports.setMulticastTimeToLive = function(socketId, ttl, callback) {
+setMulticastTimeToLive: function(socketId, ttl, callback) {
     var win = callback && function() {
         callback(0);
     };
@@ -128,9 +153,11 @@ exports.setMulticastTimeToLive = function(socketId, ttl, callback) {
         callback(error.message, callback, error.resultCode);
     }
     exec(win, fail, 'ChromeSocketsUdp', 'setMulticastTimeToLive', [socketId, ttl]);
-};
+//};
+},
 
-exports.setMulticastLoopbackMode = function(socketId, enabled, callback) {
+//exports.setMulticastLoopbackMode = function(socketId, enabled, callback) {
+setMulticastLoopbackMode: function(socketId, enabled, callback) {
     var win = callback && function() {
         callback(0);
     };
@@ -138,16 +165,22 @@ exports.setMulticastLoopbackMode = function(socketId, enabled, callback) {
         callback(error.message, callback, error.resultCode);
     }
     exec(win, fail, 'ChromeSocketsUdp', 'setMulticastLoopbackMode', [socketId, enabled]);
-};
+//};
+},
 
-exports.getJoinedGroups = function(socketId, callback) {
+//exports.getJoinedGroups = function(socketId, callback) {
+getJoinedGroups: function(socketId, callback) {
     exec(callback, null, 'ChromeSocketsUdp', 'getJoinedGroups', [socketId]);
-};
+//};
+},
 
-exports.onReceive = new Event('onReceive');
-exports.onReceiveError = new Event('onReceiveError');
+//exports.onReceive = new Event('onReceive');
+onReceive: new Event('onReceive'),
+//exports.onReceiveError = new Event('onReceiveError');
+onReceiveError: new Event('onReceiveError'),
 
-function registerReceiveEvents() {
+//function registerReceiveEvents() {
+registerReceiveEvents: function() {
 
     var win = function() {
         var info = {
@@ -195,4 +228,8 @@ function registerReceiveEvents() {
     exec(win, fail, 'ChromeSocketsUdp', 'registerReceiveEvents', []);
 }
 
-require('org.chromium.common.helpers').runAtStartUp(registerReceiveEvents);
+//require('org.chromium.common.helpers').runAtStartUp(registerReceiveEvents);
+
+};
+module.exports = udp;
+
